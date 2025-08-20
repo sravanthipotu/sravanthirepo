@@ -1,0 +1,27 @@
+version: 0.2
+
+env:
+  variables:
+    AWS_REGION: us-east-1
+    REPOSITORY_URI: 424592695688.dkr.ecr.us-east-1.amazonaws.com/ecsrepo
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $REPOSITORY_URI
+  build:
+    commands:
+      - echo Building the Docker image...
+      - docker build -t ecsrepo:latest .
+      - docker tag ecsrepo:latest $REPOSITORY_URI:latest
+  post_build:
+    commands:
+      - echo Pushing the Docker image...
+      - docker push $REPOSITORY_URI:latest
+      - echo Creating imagedefinitions.json file...
+      - printf '[{"name":"ecsrepo","imageUri":"%s"}]' $REPOSITORY_URI:latest > imagedefinitions.json
+
+artifacts:
+  files:
+    - imagedefinitions.json
