@@ -2,9 +2,8 @@ version: 0.2
 
 env:
   variables:
-    AWS_REGION: us-east-1
-    REPOSITORY_URI: 424592695688.dkr.ecr.us-east-1.amazonaws.com/ecsrepo
-
+    AWS_REGION: ap-south-1
+    REPOSITORY_URI: 149050209804.dkr.ecr.ap-south-1.amazonaws.com/ecsrepo
 phases:
   pre_build:
     commands:
